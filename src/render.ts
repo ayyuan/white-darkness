@@ -1,11 +1,11 @@
 import gl from './gl';
-import { createMat4, perspective, rotateX, rotateY, rotateZ, translate } from './math/mat4';
+import { createMat4, lookAt, perspective, rotateX, rotateY, rotateZ, translate } from './math/mat4';
 import { createRaymarchProgram } from './programs/createRaymarchProgram';
 
 const raymarchProgram = createRaymarchProgram();
 const fovy = 60 * Math.PI / 180;
 const projectionMatrix = perspective(createMat4(), fovy, window.innerWidth/window.innerHeight, 0.1, 100);
-let modelViewMatrix = createMat4();
+let modelMatrix = createMat4();
 
 addEventListener('resize', () => perspective(projectionMatrix, fovy, window.innerWidth/window.innerHeight, 0.1, 100));
 
@@ -21,14 +21,22 @@ export default function render() {
   );
 
   const r = 0.001*performance.now();
-  modelViewMatrix = translate(createMat4(), [0,0,-6]);
-  rotateX(modelViewMatrix, r);
-  rotateY(modelViewMatrix, r);
-  rotateZ(modelViewMatrix, r);
+  // modelMatrix = translate(createMat4(), [0,0,-6]);
+  // rotateX(modelMatrix, r);
+  // rotateY(modelMatrix, r);
+  // rotateZ(modelMatrix, r);
   gl.uniformMatrix4fv(
-    gl.getUniformLocation(raymarchProgram, 'uModelViewMatrix'),
+    gl.getUniformLocation(raymarchProgram, 'uModelMatrix'),
     false,
-    modelViewMatrix,
+    modelMatrix,
+  );
+
+  const eye = [6*Math.sin(r), 3, 6*Math.cos(r)];
+  const viewMatrix = lookAt(createMat4(), eye, [0,0,0], [0,1,0]);
+  gl.uniformMatrix4fv(
+    gl.getUniformLocation(raymarchProgram, 'uViewMatrix'),
+    false,
+    viewMatrix,
   );
 
   // render

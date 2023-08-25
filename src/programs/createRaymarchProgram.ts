@@ -7,16 +7,17 @@ const vertex =
 /* glsl */ `#version 300 es
 
 uniform mat4 uProjectionMatrix;
-uniform mat4 uModelViewMatrix;
+uniform mat4 uModelMatrix;
+uniform mat4 uViewMatrix;
 
 in vec4 aPosition;
 
 out vec3 vPosition;
 
 void main() {
-  vec4 mvPos = uModelViewMatrix * aPosition;
-  vPosition = mvPos.xyz;
-  gl_Position = uProjectionMatrix * mvPos;
+  vec4 worldPos = uModelMatrix * aPosition;
+  vPosition = worldPos.xyz;
+  gl_Position = uProjectionMatrix * uViewMatrix * worldPos;
 }
 `;
 

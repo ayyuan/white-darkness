@@ -21,6 +21,43 @@ export function perspective(m: Float32Array, fovy: number, aspect: number, near:
   return m;
 }
 
+// create view matrix
+// NOTE: make sure eye and at are not the same value
+// NOTE: assume up is normalized
+export function lookAt(m: Float32Array, eye: number[], at: number[], up: number[]) {
+  // z = normalize( eye - at ), camera looking in -z-axis
+  let z0 = eye[0] - at[0];
+  let z1 = eye[1] - at[1];
+  let z2 = eye[2] - at[2];
+  let len = 1 / Math.sqrt(z0*z0 + z1*z1 + z2*z2);
+  z0 *= len;
+  z1 *= len;
+  z2 *= len;
+
+  // x = cross(up, z)
+  let x0 = up[1]*z2 - up[2]*z1;
+  let x1 = up[2]*z0 - up[0]*z2;
+  let x2 = up[0]*z1 - up[1]*z0;
+  // assume up is normalized so no need to normalize it
+
+  // y = cross(z, x)
+  let y0 = z1*x2 - z2*x1;
+  let y1 = z2*x0 - z0*x2;
+  let y2 = z0*x1 - z1*x0;
+
+  // translation component
+  let t0 = -(x0*eye[0] + x1*eye[1] + x2*eye[2]);
+  let t1 = -(y0*eye[0] + y1*eye[1] + y2*eye[2]);
+  let t2 = -(z0*eye[0] + z1*eye[1] + z2*eye[2]);
+
+  m[0] = x0; m[4] = x1; m[8 ] = x2; m[12] = t0;
+  m[1] = y0; m[5] = y1; m[9 ] = y2; m[13] = t1;
+  m[2] = z0; m[6] = z1; m[10] = z2; m[14] = t2;
+  m[3] = 0 ; m[7] = 0 ; m[11] = 0;  m[15] = 1;
+
+  return m;
+}
+
 export function rotateX(m: Float32Array, rad: number) {
   const c = Math.cos(rad);
   const s = Math.sin(rad);
