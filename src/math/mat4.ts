@@ -23,7 +23,9 @@ export function perspective(m: Float32Array, fovy: number, aspect: number, near:
 
 // create view matrix
 // NOTE: make sure eye and at are not the same value
-// NOTE: assume up is normalized
+// NOTE: make sure view direction and up vector are not aligned
+// otherwise cross product will result in 0 due to them being parallel
+// ie eye=[0,5,0] and up: [0,1,0] will not work instead use eye=[0.01,5,0]
 export function lookAt(m: Float32Array, eye: number[], at: number[], up: number[]) {
   // z = normalize( eye - at ), camera looking in -z-axis
   let z0 = eye[0] - at[0];
@@ -38,12 +40,19 @@ export function lookAt(m: Float32Array, eye: number[], at: number[], up: number[
   let x0 = up[1]*z2 - up[2]*z1;
   let x1 = up[2]*z0 - up[0]*z2;
   let x2 = up[0]*z1 - up[1]*z0;
-  // assume up is normalized so no need to normalize it
+  len = 1 / Math.sqrt(x0*x0 + x1*x1 + x2*x2);
+  x0 *= len;
+  x1 *= len;
+  x2 *= len;
 
   // y = cross(z, x)
   let y0 = z1*x2 - z2*x1;
   let y1 = z2*x0 - z0*x2;
   let y2 = z0*x1 - z1*x0;
+  len = 1 / Math.sqrt(y0*y0 + y1*y1 + y2*y2);
+  y0 *= len;
+  y1 *= len;
+  y2 *= len;
 
   // translation component
   let t0 = -(x0*eye[0] + x1*eye[1] + x2*eye[2]);
