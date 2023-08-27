@@ -14,9 +14,10 @@ export default class OrbitCamera {
   private delta = [0, 0];
 
   // settings
-  private readonly rotationSpeed;
+  private readonly rotationSense;
   private readonly maxPolar;
   private readonly minPolar;
+  private readonly dampingFactor;
 
   private static readonly MAX_POLAR = Math.PI - 1e-6;
   private static readonly MIN_POLAR = 1e-6;
@@ -25,25 +26,28 @@ export default class OrbitCamera {
     position,
     target,
     up,
-    rotationSpeed = 1,
+    rotationSense = 1,
     maxPolar = OrbitCamera.MAX_POLAR, // max vertical angle
     minPolar = OrbitCamera.MIN_POLAR, // min vertical angle
+    dampingFactor = 0.05,
   } : {
     position: [number, number, number],
     target: [number, number, number],
     up: [number, number, number],
-    rotationSpeed?: number,
+    rotationSense?: number,
     maxPolar?: number,
     minPolar?: number,
+    dampingFactor?: number,
   }) {
     this.position = position;
     this.target = target;
     this.up = up;
     this.viewMatrix = lookAt(createMat4(), position, target, up);
 
-    this.rotationSpeed = rotationSpeed;
+    this.rotationSense = rotationSense;
     this.maxPolar = clamp(maxPolar, OrbitCamera.MIN_POLAR, OrbitCamera.MAX_POLAR);
     this.minPolar = clamp(minPolar, OrbitCamera.MIN_POLAR, OrbitCamera.MAX_POLAR);
+    this.dampingFactor = dampingFactor;
 
     addEventListener('pointerdown', (ev) => {
       this.start = [ev.clientX, ev.clientY];
@@ -65,12 +69,18 @@ export default class OrbitCamera {
   }
 
   update() {
-    if (!this.isRotating) return;
+    if ( Math.abs(this.delta[0]) < 1e-3 && Math.abs(this.delta[1]) < 1e-3 ) {
+      this.delta[0] = this.delta[1] = 0;
+      return;
+    }
 
     const spherical = Spherical.fromVec3(this.position);
-    spherical.theta -= this.delta[0] * this.rotationSpeed;
-    spherical.phi   -= this.delta[1] * this.rotationSpeed;
+    spherical.theta -= this.delta[0] * this.rotationSense * this.dampingFactor;
+    spherical.phi   -= this.delta[1] * this.rotationSense * this.dampingFactor;
     spherical.phi = clamp(spherical.phi, this.minPolar, this.maxPolar);
+
+    this.delta[0] *= 1 - this.dampingFactor;
+    this.delta[1] *= 1 - this.dampingFactor;
 
     const pos = spherical.toVec3();
     this.position[0] = pos[0];
@@ -79,7 +89,5 @@ export default class OrbitCamera {
 
     // update viewMatrix
     lookAt(this.viewMatrix, this.position, this.target, this.up);
-
-    this.delta = [0, 0];
   }
 }
