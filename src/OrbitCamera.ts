@@ -49,9 +49,13 @@ export default class OrbitCamera {
     this.minPolar = clamp(minPolar, OrbitCamera.MIN_POLAR, OrbitCamera.MAX_POLAR);
     this.dampingFactor = dampingFactor;
 
+    const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+    canvas.classList.add('cursor-grab');
+
     addEventListener('pointerdown', (ev) => {
       this.start = [ev.clientX, ev.clientY];
       this.isRotating = true;
+      canvas.classList.add('cursor-grabbing');
     });
     addEventListener('pointermove', (ev) => {
       if (!this.isRotating) return;
@@ -65,6 +69,7 @@ export default class OrbitCamera {
     });
     addEventListener('pointerup', () => {
       this.isRotating = false;
+      canvas.classList.remove('cursor-grabbing');
     });
   }
 
