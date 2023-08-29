@@ -21,6 +21,37 @@ canvas {
   display: block;
 }
 
+#error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+}
+
+.error-1 {
+  display: block;
+  text-align: center;
+  color: #CC3333;
+  font-size: 2rem;
+  font-weight: 550;
+  margin-bottom: 2.25rem;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.error-2 {
+  display: block;
+  text-align: center;
+  color: #969696;
+  font-weight: 500;
+  font-size: 1.75rem;
+}
+
+.hidden {
+  display: none;
+}
+
 .cursor-grab {
   cursor: -webkit-grab; /* Chrome 1-21, Safari 4+ */
   cursor:    -moz-grab; /* Firefox 1.5-26 */
