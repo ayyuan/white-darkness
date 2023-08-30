@@ -39,34 +39,26 @@ void main() {
 
 const positionBuffer = createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+const v0 = [-1, -1, -1];
+const v1 = [+1, -1, -1];
+const v2 = [-1, +1, -1];
+const v3 = [+1, +1, -1];
+const v4 = [-1, -1, +1];
+const v5 = [+1, -1, +1];
+const v6 = [-1, +1, +1];
+const v7 = [+1, +1, +1];
 gl.bufferData(
   gl.ARRAY_BUFFER,
   new Float32Array([
-    -0.5, -0.5, -0.5, // v0
-    +0.5, -0.5, -0.5, // v1
-    -0.5, +0.5, -0.5, // v2
-    +0.5, +0.5, -0.5, // v3
-    -0.5, -0.5, +0.5, // v4
-    +0.5, -0.5, +0.5, // v5
-    -0.5, +0.5, +0.5, // v6
-    +0.5, +0.5, +0.5, // v7
+    ...v1, ...v0, ...v2, ...v1, ...v2, ...v3, // back
+    ...v4, ...v5, ...v7, ...v4, ...v7, ...v6, // front
+    ...v6, ...v7, ...v3, ...v6, ...v3, ...v2, // top
+    ...v0, ...v1, ...v5, ...v0, ...v5, ...v4, // bottom
+    ...v5, ...v1, ...v3, ...v5, ...v3, ...v7, // right
+    ...v0, ...v4, ...v6, ...v0, ...v6, ...v2  // left
   ]),
-  gl.STATIC_DRAW
-);
-
-const indexBuffer = createBuffer();
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-gl.bufferData(
-  gl.ELEMENT_ARRAY_BUFFER,
-  new Uint8Array([
-      1, 0, 2, 1, 2, 3, // back
-      4, 5, 7, 4, 7, 6, // front
-      6, 7, 3, 6, 3, 2, // top
-      0, 1, 5, 0, 5, 4, // bottom
-      5, 1, 3, 5, 3, 7, // right
-      0, 4, 6, 0, 6, 2  // left
-  ]),
-  gl.STATIC_DRAW
+  gl.STATIC_DRAW,
 );
 
 export function createRaymarchProgram() {

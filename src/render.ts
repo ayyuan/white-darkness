@@ -46,5 +46,5 @@ export default function render() {
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_BYTE, 0);
+  gl.drawArrays(gl.TRIANGLES, 0, 36);
 }
