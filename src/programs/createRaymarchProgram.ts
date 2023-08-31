@@ -10,12 +10,14 @@ uniform mat4 uProjectionMatrix;
 uniform mat4 uModelMatrix;
 uniform mat4 uViewMatrix;
 
-in vec4 aPosition;
+in vec3 aPosition;
+in vec3 aInstancePosition;
 
 out vec3 vPosition;
 
 void main() {
-  vec4 worldPos = uModelMatrix * aPosition;
+  vec4 p = vec4( aPosition + aInstancePosition, 1. );
+  vec4 worldPos = uModelMatrix * p;
   vPosition = worldPos.xyz;
   gl_Position = uProjectionMatrix * uViewMatrix * worldPos;
 }
@@ -37,6 +39,7 @@ void main() {
 }
 `;
 
+// create/init positionBuffer
 const positionBuffer = createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
@@ -61,22 +64,48 @@ gl.bufferData(
   gl.STATIC_DRAW,
 );
 
+// create/init instancePositionBuffer
+const instancePositionBuffer = createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, instancePositionBuffer);
+gl.bufferData(
+  gl.ARRAY_BUFFER,
+  new Float32Array([
+    0,0,0,
+    2.1,0,0,
+  ]),
+  gl.STATIC_DRAW,
+);
+
 export function createRaymarchProgram() {
   const vs = createShader(gl.VERTEX_SHADER, vertex);
   const fs = createShader(gl.FRAGMENT_SHADER, fragment);
 
   const program = createProgram(vs, fs);
 
-  const attribLocation = gl.getAttribLocation(program, 'aPosition');
+  const aPositionLoc = gl.getAttribLocation(program, 'aPosition');
   gl.bindBuffer( gl.ARRAY_BUFFER, positionBuffer );
-  gl.enableVertexAttribArray( attribLocation );
+  gl.enableVertexAttribArray( aPositionLoc );
   gl.vertexAttribPointer(
-    attribLocation,
+    aPositionLoc,
     3,
     gl.FLOAT,
     false,
     0,
     0,
   );
+
+  const aInstancePosLoc = gl.getAttribLocation(program, 'aInstancePosition');
+  gl.bindBuffer( gl.ARRAY_BUFFER, instancePositionBuffer );
+  gl.enableVertexAttribArray( aInstancePosLoc );
+  gl.vertexAttribPointer(
+    aInstancePosLoc,
+    3,
+    gl.FLOAT,
+    false,
+    0,
+    0,
+  );
+  gl.vertexAttribDivisor(aInstancePosLoc, 1);
+
   return program;
 }

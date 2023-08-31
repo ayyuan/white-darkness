@@ -4,12 +4,12 @@ import { createMat4, perspective, } from './math/mat4';
 import { createRaymarchProgram } from './programs/createRaymarchProgram';
 
 const raymarchProgram = createRaymarchProgram();
-const fovy = 60 * Math.PI / 180;
+const fovy = Math.PI / 3; // 60deg
 const projectionMatrix = perspective(createMat4(), fovy, window.innerWidth/window.innerHeight, 0.1, 100);
 const modelMatrix = createMat4();
 
 const controls = new OrbitCamera({
-  position: [0.01,0,5],
+  position: [0.01,0,10],
   target: [0,0,0],
   up: [0,1,0],
   maxPolar: 3*Math.PI / 4,
@@ -46,5 +46,5 @@ export default function render() {
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  gl.drawArrays(gl.TRIANGLES, 0, 36);
+  gl.drawArraysInstanced(gl.TRIANGLES, 0, 36, 2);
 }
