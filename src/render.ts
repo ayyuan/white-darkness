@@ -1,7 +1,7 @@
 import OrbitCamera from './OrbitCamera';
 import gl from './gl';
 import { createMat4, perspective, } from './math/mat4';
-import { createRaymarchProgram } from './programs/createRaymarchProgram';
+import createRaymarchProgram from './programs/raymarch/createRaymarchProgram';
 
 const raymarchProgram = createRaymarchProgram();
 const fovy = Math.PI / 3; // 60deg
