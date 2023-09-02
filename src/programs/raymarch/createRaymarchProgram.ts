@@ -15,8 +15,11 @@ in vec3 aPosition;
 in vec3 aInstancePosition;
 
 out vec3 vPosition;
+out vec3 vP;
 
 void main() {
+  vP = aPosition;
+
   vec4 p = vec4( aPosition + aInstancePosition, 1. );
   vec4 worldPos = uModelMatrix * p;
   vPosition = worldPos.xyz;
@@ -27,15 +30,25 @@ void main() {
 const fragment =
 /* glsl */ `#version 300 es
 
+#define SHOW_GRID 1
+
 precision highp float;
 
 out vec4 outColor;
 
 in vec3 vPosition;
+in vec3 vP;
 
 void main() {
   vec3 n = normalize( cross(dFdx(vPosition), dFdy(vPosition)) );
   n = 0.5*n + 0.5;
+
+#if SHOW_GRID
+  float pMin = min(vP.x, min(vP.y, vP.z));
+  float pMax = max(vP.x, max(vP.y, vP.z));
+  n *= smoothstep(-1., -0.9, pMin) + smoothstep(1., 0.9, pMax);
+#endif
+
   outColor = vec4(n,1.);
 }
 `;
