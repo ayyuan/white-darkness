@@ -1,4 +1,4 @@
-import gl from '../gl';
+import gl from '.';
 
 export default function createBuffer() {
   const buf = gl.createBuffer();

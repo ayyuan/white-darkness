@@ -1,5 +1,5 @@
 import gl from '../../gl';
-import createBuffer from '../createBuffer';
+import createBuffer from '../../gl/createBuffer';
 
 const v0 = [-1, -1, -1];
 const v1 = [+1, -1, -1];

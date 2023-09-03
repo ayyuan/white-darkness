@@ -1,6 +1,6 @@
 import gl from '../../gl';
-import createProgram from '../createProgram';
-import createShader from '../createShader';
+import createProgram from '../../gl/createProgram';
+import createShader from '../../gl/createShader';
 import createInstancePositionBuffer from './createInstancePositionBuffer';
 import createPositionBuffer from './createPositionBuffer';
 
@@ -56,7 +56,7 @@ void main() {
 const positionBuffer = createPositionBuffer();
 const instancePositionBuffer = createInstancePositionBuffer();
 
-export default function createRaymarchProgram() {
+export default function createSpikyBallProgram() {
   const vs = createShader(gl.VERTEX_SHADER, vertex);
   const fs = createShader(gl.FRAGMENT_SHADER, fragment);
 

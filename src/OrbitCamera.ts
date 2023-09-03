@@ -1,12 +1,13 @@
 import Spherical from './math/Spherical';
 import clamp from './math/clamp';
-import { createMat4, lookAt } from './math/mat4';
+import { createMat4, lookAt, perspective } from './math/mat4';
 
 export default class OrbitCamera {
 
   private readonly position: [number, number, number];
   private readonly target: [number, number, number];
   private readonly up: [number, number, number];
+  readonly projectionMatrix: Float32Array;
   readonly viewMatrix: Float32Array;
 
   private isRotating = false;
@@ -26,6 +27,9 @@ export default class OrbitCamera {
     position,
     target,
     up,
+    near = 0.1,
+    far = 1000,
+    fovy = Math.PI / 3, // 60 deg
     rotationSense = 1,
     maxPolar = OrbitCamera.MAX_POLAR, // max vertical angle
     minPolar = OrbitCamera.MIN_POLAR, // min vertical angle
@@ -34,6 +38,9 @@ export default class OrbitCamera {
     position: [number, number, number],
     target: [number, number, number],
     up: [number, number, number],
+    near?: number,
+    far?: number,
+    fovy?: number,
     rotationSense?: number,
     maxPolar?: number,
     minPolar?: number,
@@ -42,6 +49,7 @@ export default class OrbitCamera {
     this.position = position;
     this.target = target;
     this.up = up;
+    this.projectionMatrix = perspective(createMat4(), fovy, window.innerWidth / window.innerHeight, near, far);
     this.viewMatrix = lookAt(createMat4(), position, target, up);
 
     this.rotationSense = rotationSense;
@@ -52,6 +60,9 @@ export default class OrbitCamera {
     const canvas = document.querySelector('canvas') as HTMLCanvasElement;
     canvas.classList.add('cursor-grab');
 
+    addEventListener('resize', () => {
+      perspective(this.projectionMatrix, fovy, window.innerWidth / window.innerHeight, near, far);
+    });
     addEventListener('pointerdown', (ev) => {
       this.start = [ev.clientX, ev.clientY];
       this.isRotating = true;

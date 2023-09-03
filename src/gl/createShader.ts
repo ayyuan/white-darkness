@@ -1,4 +1,4 @@
-import gl from '../gl';
+import gl from '.';
 
 // https://webgl2fundamentals.org/webgl/lessons/webgl-fundamentals.html
 export default function createShader(type: number, source: string) {

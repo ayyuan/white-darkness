@@ -1,5 +1,5 @@
 import gl from '../../gl';
-import createBuffer from '../createBuffer';
+import createBuffer from '../../gl/createBuffer';
 
 const positions = createPositions(20);
 
