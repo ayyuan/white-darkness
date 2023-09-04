@@ -118,6 +118,19 @@ export function rotateZ(m: Float32Array, rad: number) {
   return m;
 }
 
+export function scale(m: Float32Array, v: [number, number, number]) {
+  const x = v[0];
+  const y = v[1];
+  const z = v[2];
+
+  m[0] *= x; m[4] *= y; m[8 ] *= z;
+  m[1] *= x; m[5] *= y; m[9 ] *= z;
+  m[2] *= x; m[6] *= y; m[10] *= z;
+  m[3] *= x; m[7] *= y; m[11] *= z;
+
+  return m;
+}
+
 export function translate(m: Float32Array, t: number[]) {
   m[12] = m[0]*t[0] + m[4]*t[1] + m[8 ]*t[2] + m[12];
   m[13] = m[1]*t[0] + m[5]*t[1] + m[9 ]*t[2] + m[13];

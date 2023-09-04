@@ -4,7 +4,7 @@ import { createMat4, lookAt, perspective } from './math/mat4';
 
 export default class OrbitCamera {
 
-  private readonly position: [number, number, number];
+  readonly position: [number, number, number];
   private readonly target: [number, number, number];
   private readonly up: [number, number, number];
   readonly projectionMatrix: Float32Array;

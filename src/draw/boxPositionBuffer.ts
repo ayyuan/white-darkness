@@ -1,5 +1,5 @@
-import gl from '../../gl';
-import createBuffer from '../../gl/createBuffer';
+import gl from '../gl';
+import createBuffer from '../gl/createBuffer';
 
 const v0 = [-1, -1, -1];
 const v1 = [+1, -1, -1];
@@ -18,7 +18,7 @@ const vertices = [
   ...v0, ...v4, ...v6, ...v0, ...v6, ...v2  // left
 ];
 
-export default function createPositionBuffer() {
+function createPositionBuffer() {
   const positionBuffer = createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
@@ -30,3 +30,5 @@ export default function createPositionBuffer() {
 
   return positionBuffer;
 }
+
+export default createPositionBuffer();

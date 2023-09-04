@@ -1,8 +1,8 @@
 import gl from '../../gl';
 import createProgram from '../../gl/createProgram';
 import createShader from '../../gl/createShader';
+import boxPositionBuffer from '../boxPositionBuffer';
 import createInstancePositionBuffer from './createInstancePositionBuffer';
-import createPositionBuffer from './createPositionBuffer';
 
 const vertex =
 /* glsl */ `#version 300 es
@@ -53,7 +53,6 @@ void main() {
 }
 `;
 
-const positionBuffer = createPositionBuffer();
 const instancePositionBuffer = createInstancePositionBuffer();
 
 export default function createSpikyBallProgram() {
@@ -63,7 +62,7 @@ export default function createSpikyBallProgram() {
   const program = createProgram(vs, fs);
 
   const aPositionLoc = gl.getAttribLocation(program, 'aPosition');
-  gl.bindBuffer( gl.ARRAY_BUFFER, positionBuffer );
+  gl.bindBuffer( gl.ARRAY_BUFFER, boxPositionBuffer );
   gl.enableVertexAttribArray( aPositionLoc );
   gl.vertexAttribPointer(
     aPositionLoc,

@@ -1,5 +1,7 @@
 import OrbitCamera from './OrbitCamera';
+import drawSkybox from './draw/skybox';
 import drawSpikyBall from './draw/spikyball';
+import gl from './gl';
 
 const camera = new OrbitCamera({
   position: [0.01,0,100],
@@ -12,5 +14,10 @@ const camera = new OrbitCamera({
 export default function render() {
   camera.update();
 
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
   drawSpikyBall(camera);
+  drawSkybox(camera);
 }
