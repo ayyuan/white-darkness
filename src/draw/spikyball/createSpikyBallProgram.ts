@@ -53,9 +53,7 @@ void main() {
 }
 `;
 
-const instancePositionBuffer = createInstancePositionBuffer();
-
-export default function createSpikyBallProgram() {
+export default function createSpikyBallProgram(size: number) {
   const vs = createShader(gl.VERTEX_SHADER, vertex);
   const fs = createShader(gl.FRAGMENT_SHADER, fragment);
 
@@ -73,6 +71,7 @@ export default function createSpikyBallProgram() {
     0,
   );
 
+  const instancePositionBuffer = createInstancePositionBuffer(size);
   const aInstancePosLoc = gl.getAttribLocation(program, 'aInstancePosition');
   gl.bindBuffer( gl.ARRAY_BUFFER, instancePositionBuffer );
   gl.enableVertexAttribArray( aInstancePosLoc );

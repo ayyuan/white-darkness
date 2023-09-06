@@ -1,14 +1,12 @@
 import gl from '../../gl';
 import createBuffer from '../../gl/createBuffer';
 
-const positions = createPositions(20);
-
-export default function createInstancePositionBuffer() {
+export default function createInstancePositionBuffer(size: number) {
   const instancePositionBuffer = createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, instancePositionBuffer);
   gl.bufferData(
     gl.ARRAY_BUFFER,
-    new Float32Array(positions),
+    new Float32Array( createPositions(size) ),
     gl.STATIC_DRAW,
   );
   return instancePositionBuffer;

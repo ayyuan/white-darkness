@@ -3,7 +3,9 @@ import gl from '../../gl';
 import { createMat4 } from '../../math/mat4';
 import createSpikyBallProgram from './createSpikyBallProgram';
 
-const program = createSpikyBallProgram();
+// bounding volume size
+const SIZE = 20;
+const program = createSpikyBallProgram(SIZE);
 const modelMatrix = createMat4();
 
 // uniform locations
@@ -21,5 +23,5 @@ export default function drawSpikyBall(camera: OrbitCamera) {
 
   // render
   gl.cullFace(gl.BACK);
-  gl.drawArraysInstanced(gl.TRIANGLES, 0, 36, 20*20*20);
+  gl.drawArraysInstanced(gl.TRIANGLES, 0, 36, SIZE * SIZE * SIZE);
 }
