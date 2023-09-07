@@ -2,7 +2,6 @@ import gl from '../../gl';
 import createProgram from '../../gl/createProgram';
 import createShader from '../../gl/createShader';
 import linearTosRGB from '../../shaders/linearTosRGB.glsl';
-import boxPositionBuffer from '../boxPositionBuffer';
 
 const vertex =
 /* glsl */ `#version 300 es
@@ -107,20 +106,5 @@ void main() {
 export default function createSkyboxProgram() {
   const vs = createShader(gl.VERTEX_SHADER, vertex);
   const fs = createShader(gl.FRAGMENT_SHADER, fragment);
-
-  const program = createProgram(vs, fs);
-
-  const aPositionLoc = gl.getAttribLocation(program, 'aPosition');
-  gl.bindBuffer( gl.ARRAY_BUFFER, boxPositionBuffer );
-  gl.enableVertexAttribArray( aPositionLoc );
-  gl.vertexAttribPointer(
-    aPositionLoc,
-    3,
-    gl.FLOAT,
-    false,
-    0,
-    0,
-  );
-
-  return program;
+  return createProgram(vs, fs);
 }
