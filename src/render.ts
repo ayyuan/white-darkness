@@ -1,4 +1,7 @@
 import OrbitCamera from './OrbitCamera';
+import drawPostProcessing from './draw/postprocessing';
+import createFBO from './draw/postprocessing/createFBO';
+import resizeFBO from './draw/postprocessing/resizeFBO';
 import drawSkybox from './draw/skybox';
 import drawSpikyBall from './draw/spikyball';
 import gl from './gl';
@@ -11,13 +14,34 @@ const camera = new OrbitCamera({
   minPolar: Math.PI / 4
 });
 
+const fbo = createFBO();
+const dpr = window.devicePixelRatio;
+resizeFBO(fbo, Math.floor(innerWidth * dpr), Math.floor(innerHeight * dpr));
+
+// update canvas size on resize event
+window.addEventListener('resize', () => {
+  const w = Math.floor( window.innerWidth * dpr );
+  const h = Math.floor( window.innerHeight * dpr );
+  gl.canvas.width = w;
+  gl.canvas.height = h;
+  resizeFBO(fbo, w, h);
+});
+
 export default function render() {
   camera.update();
 
-  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  // -- render scene to texture
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo.fbo);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   drawSpikyBall(camera);
   drawSkybox(camera);
+
+  // -- post-processing
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  drawPostProcessing(fbo.texture);
 }

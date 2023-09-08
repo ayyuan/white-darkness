@@ -1,5 +1,5 @@
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
-const ctx = canvas.getContext('webgl2');
+const ctx = canvas.getContext('webgl2' , {antialias: false});
 if (ctx === null) {
   const error = document.getElementById('error')!;
   canvas.classList.add('hidden');
@@ -17,11 +17,5 @@ gl.enable(gl.DEPTH_TEST);
 const dpr = window.devicePixelRatio;
 gl.canvas.width = Math.floor( window.innerWidth * dpr );
 gl.canvas.height = Math.floor( window.innerHeight * dpr );
-
-// update canvas size on resize event
-window.addEventListener('resize', () => {
-  gl.canvas.width = Math.floor( window.innerWidth * dpr );
-  gl.canvas.height = Math.floor( window.innerHeight * dpr );
-});
 
 export default gl;
