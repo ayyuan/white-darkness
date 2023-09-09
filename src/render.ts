@@ -42,7 +42,7 @@ export default function render(delta: number) {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   drawSpikyBall(camera, audio, time);
-  drawSkybox(camera);
+  drawSkybox(camera, audio, time);
 
   // -- post-processing
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
