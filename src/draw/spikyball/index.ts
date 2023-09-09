@@ -1,6 +1,8 @@
+import AudioData from '../../AudioData';
 import OrbitCamera from '../../OrbitCamera';
 import gl from '../../gl';
 import { createMat4 } from '../../math/mat4';
+import createBluenoiseTexture from './createBluenoiseTexture';
 import createSpikyBallProgram from './createSpikyBallProgram';
 import createVAO from './createVAO';
 
@@ -14,8 +16,17 @@ const modelMatrix = createMat4();
 const projMatLoc = gl.getUniformLocation(program, 'uProjectionMatrix')!;
 const modelMatLoc = gl.getUniformLocation(program, 'uModelMatrix')!;
 const viewMatLoc = gl.getUniformLocation(program, 'uViewMatrix')!;
+const audioLoc = gl.getUniformLocation(program, 'uAudio')!;
+const sizeLoc = gl.getUniformLocation(program, 'uSize')!;
+const cameraLoc = gl.getUniformLocation(program, 'uCameraPos')!;
+const bluenoiseLoc = gl.getUniformLocation(program, 'uBluenoise')!;
+const timeLoc = gl.getUniformLocation(program, 'uTime')!;
+const resLoc = gl.getUniformLocation(program, 'uResolution')!;
+const bgTimeLoc = gl.getUniformLocation(program, 'uBgTime')!;
 
-export default function drawSpikyBall(camera: OrbitCamera) {
+const bluenoiseTex = createBluenoiseTexture();
+
+export default function drawSpikyBall(camera: OrbitCamera, audio: AudioData, time: number) {
   gl.useProgram(program);
 
   // vao
@@ -25,6 +36,16 @@ export default function drawSpikyBall(camera: OrbitCamera) {
   gl.uniformMatrix4fv(projMatLoc, false, camera.projectionMatrix);
   gl.uniformMatrix4fv(modelMatLoc, false, modelMatrix);
   gl.uniformMatrix4fv(viewMatLoc, false, camera.viewMatrix);
+  gl.uniform1fv(audioLoc, audio.dataArray);
+  gl.uniform1f(sizeLoc, SIZE);
+  gl.uniform3fv(cameraLoc, camera.position);
+  gl.uniform1f(timeLoc, time);
+  gl.uniform1f(bgTimeLoc, audio.time);
+  gl.uniform2f(resLoc, gl.canvas.width, gl.canvas.height);
+
+  gl.activeTexture(gl.TEXTURE0 + 0);
+  gl.bindTexture(gl.TEXTURE_2D, bluenoiseTex);
+  gl.uniform1i(bluenoiseLoc, 0);
 
   // render
   gl.cullFace(gl.BACK);
