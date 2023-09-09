@@ -21,6 +21,10 @@ canvas {
   display: block;
 }
 
+audio {
+  position: absolute;
+}
+
 #error {
   position: absolute;
   top: 50%;
