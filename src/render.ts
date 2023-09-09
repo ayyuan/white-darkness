@@ -49,5 +49,5 @@ export default function render(delta: number) {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  drawPostProcessing(fbo.texture);
+  drawPostProcessing(fbo.texture, audio);
 }

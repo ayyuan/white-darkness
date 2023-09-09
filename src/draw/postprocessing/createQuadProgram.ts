@@ -21,6 +21,7 @@ const fragment =
 precision highp float;
 
 uniform sampler2D uColor;
+uniform float uShake;
 
 in vec2 vPosition;
 
@@ -31,8 +32,7 @@ void main() {
 
   // radial chromatic abberation from: https://www.shadertoy.com/view/Mtf3zl
   float distFromCenter = length( uv - vec2( 0.5, 0.5 ) );
-  //TODO:
-  float shift = 0.0; //0.05 * shake(iChannel1);
+  float shift = 0.05 * uShake;
 
   vec2 uvR, uvG, uvB;
   vec4 color;

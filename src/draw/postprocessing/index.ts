@@ -1,3 +1,4 @@
+import AudioData from '../../AudioData';
 import gl from '../../gl';
 import createQuadProgram from './createQuadProgram';
 import createVAO from './createVAO';
@@ -6,14 +7,17 @@ const program = createQuadProgram();
 const vao = createVAO(program);
 
 const colorLoc = gl.getUniformLocation(program, 'uColor')!;
+const shakeLoc = gl.getUniformLocation(program, 'uShake')!;
 
-export default function drawPostProcessing(tex: WebGLTexture) {
+export default function drawPostProcessing(tex: WebGLTexture, audio: AudioData) {
   gl.useProgram(program);
 
   // vao
   gl.bindVertexArray(vao);
 
   // uniforms
+  gl.uniform1f(shakeLoc, audio.shake);
+
   gl.activeTexture(gl.TEXTURE0 + 0);
   gl.bindTexture(gl.TEXTURE_2D, tex);
   gl.uniform1i(colorLoc, 0);
