@@ -10,7 +10,6 @@ import gl from './gl';
 const camera = new OrbitCamera({
   position: [0.01,0,70],
   target: [0,0,0],
-  up: [0,1,0],
   maxPolar: 3*Math.PI / 4,
   minPolar: Math.PI / 4
 });
@@ -34,7 +33,7 @@ const audio = new AudioData(audioElem);
 export default function render(delta: number) {
   const time = 1e-3 * performance.now();
   audio.update(1e-3 * delta);
-  camera.update();
+  camera.update(time, audio);
 
   // -- render scene to texture
   gl.bindFramebuffer(gl.FRAMEBUFFER, fbo.fbo);

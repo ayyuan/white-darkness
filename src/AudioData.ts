@@ -49,7 +49,7 @@ export default class AudioData {
     this.dataArray[2] = this.getAvgAmpBet(5200, 14000) / 255;
 
     this.time += delta * Math.max( Math.pow(this.dataArray[0], 10.), 0.1 );
-    this.shake = Math.min( 1, Math.exp( 50*this.dataArray[0] - 48 ) );
+    this.shake = Math.min( 1, Math.exp( 50*this.dataArray[0] - 47.5 ) );
   }
 
   private getAvgAmpBet(f1: number, f2: number) {

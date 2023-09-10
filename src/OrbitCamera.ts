@@ -1,3 +1,4 @@
+import AudioData from './AudioData';
 import Spherical from './math/Spherical';
 import clamp from './math/clamp';
 import { createMat4, lookAt, perspective } from './math/mat4';
@@ -6,7 +7,6 @@ export default class OrbitCamera {
 
   readonly position: [number, number, number];
   private readonly target: [number, number, number];
-  private readonly up: [number, number, number];
   readonly projectionMatrix: Float32Array;
   readonly viewMatrix: Float32Array;
 
@@ -19,6 +19,7 @@ export default class OrbitCamera {
   private readonly maxPolar;
   private readonly minPolar;
   private readonly dampingFactor;
+  private readonly maxShake;
 
   private static readonly MAX_POLAR = Math.PI - 1e-6;
   private static readonly MIN_POLAR = 1e-6;
@@ -26,7 +27,6 @@ export default class OrbitCamera {
   constructor({
     position,
     target,
-    up,
     near = 0.1,
     far = 1000,
     fovy = Math.PI / 3, // 60 deg
@@ -34,10 +34,10 @@ export default class OrbitCamera {
     maxPolar = OrbitCamera.MAX_POLAR, // max vertical angle
     minPolar = OrbitCamera.MIN_POLAR, // min vertical angle
     dampingFactor = 0.05,
+    maxShake = 0.7,
   } : {
     position: [number, number, number],
     target: [number, number, number],
-    up: [number, number, number],
     near?: number,
     far?: number,
     fovy?: number,
@@ -45,17 +45,18 @@ export default class OrbitCamera {
     maxPolar?: number,
     minPolar?: number,
     dampingFactor?: number,
+    maxShake?: number,
   }) {
     this.position = position;
     this.target = target;
-    this.up = up;
     this.projectionMatrix = perspective(createMat4(), fovy, window.innerWidth / window.innerHeight, near, far);
-    this.viewMatrix = lookAt(createMat4(), position, target, up);
+    this.viewMatrix = lookAt(createMat4(), position, target, [0,1,0]);
 
     this.rotationSense = rotationSense;
     this.maxPolar = clamp(maxPolar, OrbitCamera.MIN_POLAR, OrbitCamera.MAX_POLAR);
     this.minPolar = clamp(minPolar, OrbitCamera.MIN_POLAR, OrbitCamera.MAX_POLAR);
     this.dampingFactor = dampingFactor;
+    this.maxShake = maxShake;
 
     const canvas = document.querySelector('canvas') as HTMLCanvasElement;
     canvas.classList.add('cursor-grab');
@@ -84,10 +85,10 @@ export default class OrbitCamera {
     });
   }
 
-  update() {
+  update(time: number, audio: AudioData) {
     if ( Math.abs(this.delta[0]) < 1e-3 && Math.abs(this.delta[1]) < 1e-3 ) {
       this.delta[0] = this.delta[1] = 0;
-      return;
+      if (audio.shake < 1e-6) return;
     }
 
     const spherical = Spherical.fromVec3(this.position);
@@ -103,7 +104,16 @@ export default class OrbitCamera {
     this.position[1] = pos[1];
     this.position[2] = pos[2];
 
+    // changing up vector to simulate camera roll
+    const an = audio.shake * 0.05 * Math.cos(23 * time);
+    const up = [Math.sin(an), Math.cos(an), 0];
+    // changing target to simulate camera shake/tilt
+    const target = [
+      this.target[0] + audio.shake * this.maxShake * Math.sin(17 * time),
+      this.target[1] + audio.shake * this.maxShake * Math.sin(31 * time),
+      this.target[2] + audio.shake * this.maxShake * Math.sin(37 * time),
+    ];
     // update viewMatrix
-    lookAt(this.viewMatrix, this.position, this.target, this.up);
+    lookAt(this.viewMatrix, this.position, target, up);
   }
 }
