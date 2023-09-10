@@ -25,6 +25,7 @@ window.addEventListener('resize', () => {
   gl.canvas.width = w;
   gl.canvas.height = h;
   resizeFBO(fbo, w, h);
+  gl.viewport(0, 0, w, h);
 });
 
 const audioElem = document.querySelector('audio')!;
@@ -37,7 +38,6 @@ export default function render(delta: number) {
 
   // -- render scene to texture
   gl.bindFramebuffer(gl.FRAMEBUFFER, fbo.fbo);
-  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   drawSpikyBall(camera, audio, time);
@@ -45,7 +45,6 @@ export default function render(delta: number) {
 
   // -- post-processing
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   drawPostProcessing(fbo.texture, audio);
