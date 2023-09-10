@@ -82,7 +82,7 @@ float map(vec3 p) {
   // spikes
   // more negative -> shorter length & thinner
   float spikeLength = -10. + 9.*f;
-  float spikes = sf.y - 0.4 * exp( spikeLength*dot(p,p) ) + 0.4*exp(-999.*f);
+  float spikes = sf.y - 0.4 * exp( spikeLength*dot(p,p) ) + 0.4*exp(-999.*f) + 0.01;
 
   // mask, gives extrusion effect
   float mask = length(p) - max(2.31*f, r+0.02);

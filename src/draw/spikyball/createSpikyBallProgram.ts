@@ -99,7 +99,7 @@ float shade(float i) {
 }
 
 float glow(float g) {
-  return 0.1 * pow(g, 1.2);
+  return 0.3 * pow(g, 1.5);
 }
 
 void main() {
@@ -117,7 +117,7 @@ void main() {
   vec3 rd = normalize(vDirection); // ray direction
   float g = 0.; // accumulate glow
 
-  const float maxT = 5.;
+  const float maxT = 4.;
 
   // dither with bluenoise to prevent banding since we are doing iteration based shading
   ivec2 size = textureSize(uBluenoise, 0) - 1;
@@ -135,7 +135,7 @@ void main() {
     t += log(0.7*d + 1.);
     g += 0.0001 / (0.0001 + d*d);
 
-    if ( abs(d) < 0.001 || t > maxT ) break;
+    if ( abs(d) < 0.01 || t > maxT ) break;
     if (shade(i) > 0.99 || glow(g) > 0.99) break;
   }
 
@@ -150,7 +150,6 @@ void main() {
     col = n;
 #else
     float gg = glow(g);
-    if (gg < 0.0001) discard;
     col = background(rd) + gg;
 #endif
   } else {
