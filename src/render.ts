@@ -8,7 +8,7 @@ import drawSpikyBall from './draw/spikyball';
 import gl from './gl';
 
 const camera = new OrbitCamera({
-  position: [0.01,0,70],
+  position: [0.01,0,50],
   target: [0,0,0],
   maxPolar: 3*Math.PI / 4,
   minPolar: Math.PI / 4

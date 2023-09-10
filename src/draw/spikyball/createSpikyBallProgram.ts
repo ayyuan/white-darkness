@@ -10,11 +10,13 @@ import vignetteGlsl from '../../shaders/vignette.glsl';
 // #defines
 const SHOW_BOUNDING_VOLUME = 0;
 const SHOW_FULL_BOUNDING_VOLUME = 0;
+const ROTATE = 1;
 
 const vertex =
 /* glsl */ `#version 300 es
 
 #define SHOW_FULL_BOUNDING_VOLUME ${SHOW_FULL_BOUNDING_VOLUME}
+#define ROTATE ${ROTATE}
 
 uniform mat4 uProjectionMatrix;
 uniform mat4 uModelMatrix;
@@ -67,6 +69,7 @@ const fragment =
 
 #define SHOW_BOUNDING_VOLUME ${SHOW_BOUNDING_VOLUME}
 #define SHOW_FULL_BOUNDING_VOLUME ${SHOW_FULL_BOUNDING_VOLUME}
+#define ROTATE ${ROTATE}
 
 precision highp float;
 
@@ -129,7 +132,7 @@ void main() {
   for (; i<60.; i+=1.) {
     float d = map(vOrigin + rd*t);
 
-    t += log(d + 1.);
+    t += log(0.7*d + 1.);
     g += 0.0001 / (0.0001 + d*d);
 
     if ( abs(d) < 0.001 || t > maxT ) break;
