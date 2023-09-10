@@ -3,6 +3,7 @@ import OrbitCamera from '../../OrbitCamera';
 import gl from '../../gl';
 import { createMat4, rotateX, rotateY } from '../../math/mat4';
 import createBluenoiseTexture from './createBluenoiseTexture';
+import createPositions from './createPositions';
 import createSpikyBallProgram from './createSpikyBallProgram';
 import createVAO from './createVAO';
 
@@ -12,7 +13,9 @@ const tmp2 = createMat4();
 // bounding volume size
 const SIZE = 20;
 const program = createSpikyBallProgram();
-const vao = createVAO(program, SIZE);
+const positions = createPositions(SIZE);
+const instanceCnt = positions.length / 3;
+const vao = createVAO(program, positions);
 
 // uniform locations
 const projMatLoc = gl.getUniformLocation(program, 'uProjectionMatrix')!;
@@ -55,6 +58,6 @@ export default function drawSpikyBall(camera: OrbitCamera, audio: AudioData, tim
 
   // render
   gl.cullFace(gl.BACK);
-  gl.drawArraysInstanced(gl.TRIANGLES, 0, 36, SIZE * SIZE * SIZE);
+  gl.drawArraysInstanced(gl.TRIANGLES, 0, 36, instanceCnt);
   gl.bindVertexArray(null);
 }

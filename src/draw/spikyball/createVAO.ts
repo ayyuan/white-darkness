@@ -3,7 +3,7 @@ import createVertexArray from '../../gl/createVertexArray';
 import boxPositionBuffer from '../boxPositionBuffer';
 import createInstancePositionBuffer from './createInstancePositionBuffer';
 
-export default function createVAO(program: WebGLProgram, size: number) {
+export default function createVAO(program: WebGLProgram, positions: number[]) {
   const vao = createVertexArray();
   gl.bindVertexArray(vao);
 
@@ -19,7 +19,7 @@ export default function createVAO(program: WebGLProgram, size: number) {
     0,
   );
 
-  const instancePositionBuffer = createInstancePositionBuffer(size);
+  const instancePositionBuffer = createInstancePositionBuffer(positions);
   const aInstancePosLoc = gl.getAttribLocation(program, 'aInstancePosition');
   gl.bindBuffer( gl.ARRAY_BUFFER, instancePositionBuffer );
   gl.enableVertexAttribArray( aInstancePosLoc );
