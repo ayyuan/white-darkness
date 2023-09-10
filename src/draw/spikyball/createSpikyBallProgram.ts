@@ -157,8 +157,7 @@ void main() {
     col = vec3( shade(i) );
   }
 
-  vignette(col);
-
+  col = vignette(col);
   outColor = vec4(col, 1.);
   // dithering to smooth out bands from glow curve
   outColor = linearTosRGB(outColor) + dither();

@@ -50,7 +50,7 @@ void main() {
   vec3 rd = normalize(vDirection);
   // like sampling from a cubemap
   vec3 c = background(rd);
-  vignette(c);
+  c = vignette(c);
   outColor = vec4(c, 1.);
   outColor = linearTosRGB(outColor) + dither();
 }
