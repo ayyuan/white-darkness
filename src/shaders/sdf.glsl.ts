@@ -70,8 +70,8 @@ float map(vec3 p) {
   float f = 0.;
   float id = hash11( sf.x );
   f += uAudio[0] * clamp( 1.0 - abs(id-0.25)/0.30, 0.0, 1.0 ) * 1.;
-  f += uAudio[1] * clamp( 1.0 - abs(id-0.50)/0.25, 0.0, 1.0 ) * (1.0 - f);
-  f += uAudio[2] * clamp( 1.0 - abs(id-0.75)/0.25, 0.0, 1.0 ) * (1.0 - f);
+  f += uAudio[1] * clamp( 1.0 - abs(id-0.50)/0.30, 0.0, 1.0 ) * (1.0 - f);
+  f += uAudio[2] * clamp( 1.0 - abs(id-0.75)/0.30, 0.0, 1.0 ) * (1.0 - f);
   // ramp up
   f = pow( clamp( f, 0.0, 1.0 ), 2.0 );
 
