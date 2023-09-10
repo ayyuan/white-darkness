@@ -40,6 +40,7 @@ void main() {
 
   // world pos of current vertex
   vec3 wp = aPosition + aInstancePosition;
+  vPosition = wp;
   // ray direction
   vDirection = normalize(wp - uCameraPos);
   // ray origin but scaled to [-scale,scale]
@@ -54,11 +55,7 @@ void main() {
     gl_Position = vec4(0.);
   } else {
 #endif
-
-    vec4 worldPos = uModelMatrix * vec4( aPosition + aInstancePosition, 1. );
-    vPosition = worldPos.xyz;
-    gl_Position = uProjectionMatrix * uViewMatrix * worldPos;
-
+    gl_Position = uProjectionMatrix * uViewMatrix * vec4(wp, 1.);
 #if !SHOW_FULL_BOUNDING_VOLUME
   }
 #endif
@@ -73,6 +70,7 @@ const fragment =
 
 precision highp float;
 
+uniform mat4 uModelMatrix;
 uniform float[3] uAudio;
 uniform float uTime;
 uniform float uBgTime;

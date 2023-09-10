@@ -61,6 +61,8 @@ float hash11(float p) {
 
 // SDF of our scene centered at (0,0,0)
 float map(vec3 p) {
+  p = (uModelMatrix * vec4(p, 1.)).xyz;
+
   vec2 sf = inverseSF( normalize(p) );
   // frequency contribution depending on id
   float f = 0.;

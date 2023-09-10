@@ -67,53 +67,74 @@ export function lookAt(m: Float32Array, eye: number[], at: number[], up: number[
   return m;
 }
 
-export function rotateX(m: Float32Array, rad: number) {
+/**
+ * Rotate matrix around X axis
+ * @param m output will be written here
+ * @param a readonly matrix
+ * @param rad degrees (in radians) to rotate
+ * @returns m
+ */
+export function rotateX(m: Float32Array, a: Float32Array, rad: number) {
   const c = Math.cos(rad);
   const s = Math.sin(rad);
 
-  const m12 = m[4]; const m13 = m[8];
-  const m22 = m[5]; const m23 = m[9];
-  const m32 = m[6]; const m33 = m[10];
-  const m42 = m[7]; const m43 = m[11];
+  const m11 = a[0]; const m12 = a[4]; const m13 = a[8];
+  const m21 = a[1]; const m22 = a[5]; const m23 = a[9];
+  const m31 = a[2]; const m32 = a[6]; const m33 = a[10];
+  const m41 = a[3]; const m42 = a[7]; const m43 = a[11];
 
-  m[4] = m12*c + m13*s; m[8 ] = m13*c - m12*s;
-  m[5] = m22*c + m23*s; m[9 ] = m23*c - m22*s;
-  m[6] = m32*c + m33*s; m[10] = m33*c - m32*s;
-  m[7] = m42*c + m43*s; m[11] = m43*c - m42*s;
+  m[0] = m11; m[4] = m12*c + m13*s; m[8 ] = m13*c - m12*s;
+  m[1] = m21; m[5] = m22*c + m23*s; m[9 ] = m23*c - m22*s;
+  m[2] = m31; m[6] = m32*c + m33*s; m[10] = m33*c - m32*s;
+  m[3] = m41; m[7] = m42*c + m43*s; m[11] = m43*c - m42*s;
 
   return m;
 }
 
-export function rotateY(m: Float32Array, rad: number) {
+/**
+ * Rotate matrix around Y axis
+ * @param m output will be written here
+ * @param a readonly matrix
+ * @param rad degrees (in radians) to rotate
+ * @returns m
+ */
+export function rotateY(m: Float32Array, a: Float32Array, rad: number) {
   const c = Math.cos(rad);
   const s = Math.sin(rad);
 
-  const m11 = m[0]; const m13 = m[8];
-  const m21 = m[1]; const m23 = m[9];
-  const m31 = m[2]; const m33 = m[10];
-  const m41 = m[3]; const m43 = m[11];
+  const m11 = a[0]; const m12 = a[4]; const m13 = a[8];
+  const m21 = a[1]; const m22 = a[5]; const m23 = a[9];
+  const m31 = a[2]; const m32 = a[6]; const m33 = a[10];
+  const m41 = a[3]; const m42 = a[7]; const m43 = a[11];
 
-  m[0] = m11*c - m13*s; m[8 ] = m11*s + m13*c;
-  m[1] = m21*c - m23*s; m[9 ] = m21*s + m23*c;
-  m[2] = m31*c - m33*s; m[10] = m31*s + m33*c;
-  m[3] = m41*c - m43*s; m[11] = m41*s + m43*c;
+  m[0] = m11*c - m13*s; m[4] = m12; m[8 ] = m11*s + m13*c;
+  m[1] = m21*c - m23*s; m[5] = m22; m[9 ] = m21*s + m23*c;
+  m[2] = m31*c - m33*s; m[6] = m32; m[10] = m31*s + m33*c;
+  m[3] = m41*c - m43*s; m[7] = m42; m[11] = m41*s + m43*c;
 
   return m;
 }
 
-export function rotateZ(m: Float32Array, rad: number) {
+/**
+ * Rotate matrix around Z axis
+ * @param m output will be written here
+ * @param a readonly matrix
+ * @param rad degrees (in radians) to rotate
+ * @returns m
+ */
+export function rotateZ(m: Float32Array, a: Float32Array, rad: number) {
   const c = Math.cos(rad);
   const s = Math.sin(rad);
 
-  const m11 = m[0]; const m12 = m[4];
-  const m21 = m[1]; const m22 = m[5];
-  const m31 = m[2]; const m32 = m[6];
-  const m41 = m[3]; const m42 = m[7];
+  const m11 = a[0]; const m12 = a[4]; const m13 = a[8];
+  const m21 = a[1]; const m22 = a[5]; const m23 = a[9];
+  const m31 = a[2]; const m32 = a[6]; const m33 = a[10];
+  const m41 = a[3]; const m42 = a[7]; const m43 = a[11];
 
-  m[0] = m11*c + m12*s; m[4] = m12*c - m11*s;
-  m[1] = m21*c + m22*s; m[5] = m22*c - m21*s;
-  m[2] = m31*c + m32*s; m[6] = m32*c - m31*s;
-  m[3] = m41*c + m42*s; m[7] = m42*c - m41*s;
+  m[0] = m11*c + m12*s; m[4] = m12*c - m11*s; m[8 ] = m13;
+  m[1] = m21*c + m22*s; m[5] = m22*c - m21*s; m[9 ] = m23;
+  m[2] = m31*c + m32*s; m[6] = m32*c - m31*s; m[10] = m33;
+  m[3] = m41*c + m42*s; m[7] = m42*c - m41*s; m[11] = m43;
 
   return m;
 }
