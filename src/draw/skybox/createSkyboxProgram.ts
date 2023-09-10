@@ -4,6 +4,7 @@ import createShader from '../../gl/createShader';
 import backgroundGlsl from '../../shaders/background.glsl';
 import ditherGlsl from '../../shaders/dither.glsl';
 import linearTosRGBGlsl from '../../shaders/linearTosRGB.glsl';
+import vignetteGlsl from '../../shaders/vignette.glsl';
 
 const vertex =
 /* glsl */ `#version 300 es
@@ -31,6 +32,7 @@ precision highp float;
 
 uniform float uTime;
 uniform float uBgTime;
+uniform vec2 uResolution;
 uniform float[3] uAudio;
 
 in vec3 vDirection;
@@ -40,10 +42,12 @@ out vec4 outColor;
 ${backgroundGlsl}
 ${ditherGlsl}
 ${linearTosRGBGlsl}
+${vignetteGlsl}
 
 void main() {
   vec3 rd = normalize(vDirection);
   vec3 c = background(rd);
+  vignette(c);
   outColor = vec4(c, 1.);
   outColor = linearTosRGB(outColor) + dither();
 }

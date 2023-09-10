@@ -17,6 +17,7 @@ const camPosLoc = gl.getUniformLocation(program, 'uCameraPos')!;
 const timeLoc = gl.getUniformLocation(program, 'uTime')!;
 const bgTimeLoc = gl.getUniformLocation(program, 'uBgTime')!;
 const audioLoc = gl.getUniformLocation(program, 'uAudio')!;
+const resLoc = gl.getUniformLocation(program, 'uResolution')!;
 
 export default function drawSkybox(camera: OrbitCamera, audio: AudioData, time: number) {
   gl.useProgram(program);
@@ -32,6 +33,7 @@ export default function drawSkybox(camera: OrbitCamera, audio: AudioData, time: 
   gl.uniform1f(timeLoc, time);
   gl.uniform1f(bgTimeLoc, audio.time);
   gl.uniform1fv(audioLoc, audio.dataArray);
+  gl.uniform2f(resLoc, gl.canvas.width, gl.canvas.height);
 
   // render
   gl.cullFace(gl.FRONT);
