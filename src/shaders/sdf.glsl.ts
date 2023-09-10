@@ -1,4 +1,9 @@
 export default /*glsl*/ `
+// taken from iq's https://www.shadertoy.com/view/lllXz4
+// p - normal vector
+// returns vec2(x, y)
+// x - unique id of cell
+// y - distance to center of cell
 vec2 inverseSF( vec3 p ) {
   const float kTau = 6.28318530718;
   const float kPhi = (1.0+sqrt(5.0))/2.0;
@@ -36,6 +41,7 @@ vec2 inverseSF( vec3 p ) {
   return vec2( j, sqrt(d) );
 }
 
+// https://iquilezles.org/articles/smin/
 float smin( float a, float b, float k ) {
   float h = clamp( 0.5+0.5*(b-a)/k, 0.0, 1.0 );
   return mix( b, a, h ) - k*h*(1.0-h);
@@ -45,6 +51,7 @@ float smax(float a,float b,float k) {
   return -smin(-a,-b,k);
 }
 
+// https://www.shadertoy.com/view/4djSRW
 float hash11(float p) {
   p = fract(p * .1031);
   p *= p + 33.33;
@@ -52,8 +59,10 @@ float hash11(float p) {
   return fract(p);
 }
 
+// SDF of our scene centered at (0,0,0)
 float map(vec3 p) {
   vec2 sf = inverseSF( normalize(p) );
+  // frequency contribution depending on id
   float f = 0.;
   float id = hash11( sf.x );
   f += uAudio[0] * clamp( 1.0 - abs(id-0.25)/0.30, 0.0, 1.0 ) * 1.;

@@ -20,6 +20,7 @@ out vec3 vDirection;
 
 void main() {
   vec4 worldPos = uModelMatrix * aPosition;
+  // ray direction
   vDirection = worldPos.xyz - uCameraPos;
   gl_Position = uProjectionMatrix * uViewMatrix * worldPos;
 }
@@ -45,7 +46,9 @@ ${linearTosRGBGlsl}
 ${vignetteGlsl}
 
 void main() {
+  // ray direction
   vec3 rd = normalize(vDirection);
+  // like sampling from a cubemap
   vec3 c = background(rd);
   vignette(c);
   outColor = vec4(c, 1.);

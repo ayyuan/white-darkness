@@ -38,14 +38,19 @@ void main() {
 
   const float scale = 2.31;
 
-  vec3 ro = aPosition + aInstancePosition;
-  vDirection = normalize(ro - uCameraPos);
-  vOrigin = scale * (ro / uSize);
+  // world pos of current vertex
+  vec3 wp = aPosition + aInstancePosition;
+  // ray direction
+  vDirection = normalize(wp - uCameraPos);
+  // ray origin but scaled to [-scale,scale]
+  vOrigin = scale * (wp / uSize);
 
+  // world pos of current voxel but scaled to [-scale,scale]
   vec3 p = scale * (aInstancePosition / uSize);
 
 #if !SHOW_FULL_BOUNDING_VOLUME
   if ( map(p) > 0.26 ) {
+    // cull/discard voxel if too far from sdf=0 isosurface
     gl_Position = vec4(0.);
   } else {
 #endif
@@ -108,7 +113,7 @@ void main() {
 #endif
 
   vec3 col = vec3(0.);
-  vec3 rd = normalize(vDirection);
+  vec3 rd = normalize(vDirection); // ray direction
   float g = 0.; // accumulate glow
 
   const float maxT = 5.;

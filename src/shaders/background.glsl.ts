@@ -42,9 +42,9 @@ vec3 background(vec3 rd) {
   // TRIPLANAR MAPPING
   // except no projections along y-axis since we wont ever see them
 
-  vec3 x = vec3(0);
-  // vec3 y = vec3(0);
-  vec3 z = vec3(0);
+  vec3 x = vec3(0.);
+  // vec3 y = vec3(0.);
+  vec3 z = vec3(0.);
 
   // weighting/blending factor
   vec3 w = pow( abs(rd), vec3(8.) );
