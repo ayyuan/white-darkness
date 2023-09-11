@@ -25,6 +25,67 @@ audio {
   position: absolute;
 }
 
+#quality-container {
+  position: absolute;
+  top: 4%;
+  left: 0;
+}
+
+#quality {
+  /* the only reason we need a parent container is so we can get its width here */
+  --parent-width: 100%;
+  position: relative;
+  left: calc(95vw - var(--parent-width));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  font-weight: 400;
+  font-size: 1rem;
+  transition: left 0.5s ease 0s;
+}
+
+@media only screen and (max-width: 700px) {
+  #quality {
+    left: calc(50vw - var(--parent-width)/2);
+  }
+}
+
+.btn {
+  color: #949494;
+  padding: 0.5rem;
+  transition: color 0.2s linear 0s;
+}
+
+.selected {
+  color: #E4E5E6;
+  font-weight: 600;
+}
+
+.btn::after {
+  content: '';
+  display: block;
+  margin-top: 0.1em;
+  width: 0%;
+  border-bottom: 1px solid #E4E5E6;
+  transition: width 0.2s linear 0s;
+}
+
+.btn.selected::after {
+  width: 100%;
+}
+
+.btn:hover {
+  cursor: pointer;
+  color: #F2F2F2;
+}
+
+#quality-label {
+  color: #949494;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
 #error {
   position: absolute;
   top: 50%;

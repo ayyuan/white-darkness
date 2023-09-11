@@ -1,7 +1,6 @@
 import gl from '../../gl';
-import createFBO from './createFBO';
+import { FBO } from './createFBO';
 
-type FBO = ReturnType<typeof createFBO>;
 export default function resizeFBO(fbo: FBO, width: number, height: number) {
   // resize texture
   gl.bindTexture(gl.TEXTURE_2D, fbo.texture);

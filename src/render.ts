@@ -6,6 +6,7 @@ import resizeFBO from './draw/postprocessing/resizeFBO';
 import drawSkybox from './draw/skybox';
 import drawSpikyBall from './draw/spikyball';
 import gl from './gl';
+import Settings from './Settings';
 
 const camera = new OrbitCamera({
   position: [0.01,0,50],
@@ -15,11 +16,11 @@ const camera = new OrbitCamera({
 });
 
 const fbo = createFBO();
-const dpr = window.devicePixelRatio;
-resizeFBO(fbo, Math.floor(innerWidth * dpr), Math.floor(innerHeight * dpr));
+const settings = new Settings(fbo);
 
 // update canvas size on resize event
 window.addEventListener('resize', () => {
+  const dpr = settings.dpr;
   const w = Math.floor( window.innerWidth * dpr );
   const h = Math.floor( window.innerHeight * dpr );
   gl.canvas.width = w;

@@ -1,5 +1,6 @@
 import gl from '../../gl';
 
+export type FBO = ReturnType<typeof createFBO>;
 export default function createFBO() {
   const fbo = gl.createFramebuffer();
   if (fbo === null) {
