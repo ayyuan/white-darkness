@@ -114,11 +114,7 @@ void main() {
   ivec2 size = textureSize(uBluenoise, 0) - 1;
   vec4 bn = texelFetch( uBluenoise, ivec2(gl_FragCoord.xy-0.5)&size, 0 );
 
-  // closest point on ray to origin
-  float distToOrigin = length( cross(rd, vec3(0.) - vOrigin) );
-
-  float tOffset = distToOrigin > 0.4 ? 0.01*bn.x : 0.3*bn.x;
-  float t = tOffset;
+  float t = 0.15*bn.x;
   float i = 0.;
   for (; i<60.; i+=1.) {
     float d = map(vOrigin + rd*t);
@@ -144,8 +140,10 @@ void main() {
 #endif
   } else {
     // hit
+    // closest distance between ray to origin
+    float distRayToOrigin = length( cross(rd, vec3(0.) - vOrigin) );
     // make areas closer to center darker
-    float j = mix(5., 15., distToOrigin*distToOrigin);
+    float j = mix(5., 22., distRayToOrigin*distRayToOrigin);
     float d = length( vOrigin + rd*t ) + 0.3;
     // mix depending on distance traveled (t), iteration count (i), hit point distance to origin (d)
     i = mix(j, i, exp(-t)*i*d/30.);
