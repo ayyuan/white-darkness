@@ -93,15 +93,6 @@ ${linearTosRGBGlsl}
 ${vignetteGlsl}
 ${ditherGlsl}
 
-// iteration based shading
-float shade(float i) {
-  return i * 0.0015;
-}
-
-float glow(float g) {
-  return 0.3 * pow(g, 1.5);
-}
-
 void main() {
 #if SHOW_FULL_BOUNDING_VOLUME
   vec3 n = normalize( cross(dFdx(vPosition), dFdy(vPosition)) );
@@ -136,7 +127,6 @@ void main() {
     g += 0.0001 / (0.0001 + d*d);
 
     if ( abs(d) < 0.01 || t > maxT ) break;
-    if (shade(i) > 0.99 || glow(g) > 0.99) break;
   }
 
   if (t > maxT) {
@@ -149,12 +139,18 @@ void main() {
     n *= smoothstep(-1., -0.9, pMin) + smoothstep(1., 0.9, pMax);
     col = n;
 #else
-    float gg = glow(g);
-    col = background(rd) + gg;
+    float glow = 0.3 * pow(g, 1.5);
+    col = background(rd) + glow;
 #endif
   } else {
     // hit
-    col = vec3( shade(i) );
+    // make areas closer to center darker
+    float j = mix(5., 15., distToOrigin*distToOrigin);
+    float d = length( vOrigin + rd*t ) + 0.3;
+    // mix depending on distance traveled (t), iteration count (i), hit point distance to origin (d)
+    i = mix(j, i, exp(-t)*i*d/30.);
+    // iteration based shading
+    col = vec3( i*0.0015 );
   }
 
   col = vignette(col);
