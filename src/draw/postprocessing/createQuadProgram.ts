@@ -22,6 +22,7 @@ precision highp float;
 
 uniform sampler2D uColor;
 uniform float uShake;
+uniform float uTransition;
 
 in vec2 vPosition;
 
@@ -31,8 +32,8 @@ void main() {
   vec2 uv = 0.5*vPosition + 0.5;
 
   // radial chromatic abberation from: https://www.shadertoy.com/view/Mtf3zl
-  float distFromCenter = length( uv - vec2( 0.5, 0.5 ) );
-  float shift = 0.05 * uShake;
+  float distFromCenter = length( uv - vec2( 0.5, mix(0.43, 0.5, uTransition) ) );
+  float shift = 0.035 * uShake;
 
   vec2 uvR, uvG, uvB;
   vec4 color;

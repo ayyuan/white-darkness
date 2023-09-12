@@ -49,5 +49,5 @@ export default function render(delta: number) {
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  drawPostProcessing(fbo.texture, audio);
+  drawPostProcessing(fbo.texture, audio, camera);
 }

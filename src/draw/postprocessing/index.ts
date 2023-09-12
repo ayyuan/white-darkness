@@ -1,4 +1,5 @@
 import AudioData from '../../AudioData';
+import OrbitCamera from '../../OrbitCamera';
 import gl from '../../gl';
 import createQuadProgram from './createQuadProgram';
 import createVAO from './createVAO';
@@ -8,8 +9,9 @@ const vao = createVAO(program);
 
 const colorLoc = gl.getUniformLocation(program, 'uColor')!;
 const shakeLoc = gl.getUniformLocation(program, 'uShake')!;
+const tLoc = gl.getUniformLocation(program, 'uTransition')!;
 
-export default function drawPostProcessing(tex: WebGLTexture, audio: AudioData) {
+export default function drawPostProcessing(tex: WebGLTexture, audio: AudioData, camera: OrbitCamera) {
   gl.useProgram(program);
 
   // vao
@@ -17,6 +19,7 @@ export default function drawPostProcessing(tex: WebGLTexture, audio: AudioData) 
 
   // uniforms
   gl.uniform1f(shakeLoc, audio.shake);
+  gl.uniform1f(tLoc, camera.transitionT);
 
   gl.activeTexture(gl.TEXTURE0 + 0);
   gl.bindTexture(gl.TEXTURE_2D, tex);

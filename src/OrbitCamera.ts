@@ -18,6 +18,7 @@ export default class OrbitCamera {
   private transitionDuration = 0;
   private readonly transitionTarget = { start: 0, end: 0 };
   private readonly transitionPos = { start: 0, end: 0 };
+  transitionT = 0;
 
   // settings
   private readonly rotationSense;
@@ -140,11 +141,16 @@ export default class OrbitCamera {
   private updateTransition(time: number) {
     const delta = time - this.transitionTime;
     if (delta > this.transitionDuration) return false;
+    const x = delta / this.transitionDuration;
+    const percent = easeInOutQuad(x);
+
+    this.transitionT = percent;
+    if ( this.transitionTarget.end > this.transitionTarget.start ) {
+      this.transitionT = 1 - this.transitionT;
+    }
 
     // update target y position
     const targetDelta = this.transitionTarget.end - this.transitionTarget.start;
-    let x = delta / this.transitionDuration;
-    let percent = easeInOutQuad(x);
     this.target[1] = clamp(
       this.transitionTarget.start + percent * targetDelta,
       Math.min( this.transitionTarget.start, this.transitionTarget.end ),
@@ -153,9 +159,6 @@ export default class OrbitCamera {
 
     // update position
     const posDelta = this.transitionPos.end - this.transitionPos.start;
-    x = delta / this.transitionDuration;
-    percent = easeInOutQuad(x);
-
     const spherical = Spherical.fromVec3(this.position);
     spherical.radius = clamp(
       this.transitionPos.start + percent * posDelta,
