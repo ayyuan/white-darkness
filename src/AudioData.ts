@@ -1,3 +1,5 @@
+import OrbitCamera from './OrbitCamera';
+
 export default class AudioData {
 
   private readonly context: AudioContext;
@@ -10,7 +12,7 @@ export default class AudioData {
 
   private static readonly SIZE = 512;
 
-  constructor(audioElem: HTMLAudioElement) {
+  constructor(audioElem: HTMLAudioElement, camera: OrbitCamera) {
     this.context = new AudioContext();
     this.analyser = this.context.createAnalyser();
     this.analyser.fftSize = AudioData.SIZE * 2;
@@ -26,17 +28,36 @@ export default class AudioData {
     const ui = document.getElementById('ui')!;
     const controls = document.getElementById('controls')!;
     controls.addEventListener('click', () => {
+      const time = 1e-3 * performance.now();
+      const dur = 0.5;
+
       if (!this.isPlaying) {
         // play song
         if (this.context.state === 'suspended') {
           this.context.resume();
         }
         audioElem.play();
+        // transitions/animations
         ui.classList.remove('play');
+        camera.transition(time, dur, {
+          start: 5,
+          end: 0,
+        }, {
+          start: 50,
+          end: 40,
+        });
       } else {
         // pause song
         audioElem.pause();
+        // transitions/animations
         ui.classList.add('play');
+        camera.transition(time, dur, {
+          start: 0,
+          end: 5,
+        }, {
+          start: 40,
+          end: 50,
+        });
       }
       this.isPlaying = !this.isPlaying;
     });

@@ -55,12 +55,18 @@ audio {
   display: none;
 }
 
+/****** UI ******/
+#ui {
+  --t-fn: cubic-bezier(0.45, 0, 0.55, 1);
+  --t-d: 0.5s;
+}
+
 /****** Title ******/
 #title-container {
   position: absolute;
-  bottom: calc(100% - 2*var(--s));
+  top: calc( 2*var(--s) );
   left: 50%;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, 0%);
   transform-origin: top left;
   scale: 1;
   color: var(--c-900);
@@ -69,7 +75,7 @@ audio {
   align-items: center;
   user-select: none;
   text-align: center;
-  transition: all 0.5s ease 0s;
+  transition: all var(--t-d) var(--t-fn) 0s;
 }
 
 #title {
@@ -83,24 +89,24 @@ audio {
 }
 
 .play #title-container{
-  bottom: 50%;
+  top: calc( 2*var(--s) );
   scale: 1.2;
-  transform: translate( -50%, calc( -0.5*var(--s)) );
+  transform: translate( -50%, 0% );
 }
 
 /****** Controls ******/
 #controls-container {
   position: absolute;
-  top: calc(100% - 2*var(--s));
+  top: calc( 100% - 3*var(--s) );
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
   transform-origin: top left;
   scale: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   user-select: none;
-  transition: all 0.5s ease 0s;
+  transition: all var(--t-d) var(--t-fn) 0s;
 }
 
 #controls {
@@ -143,8 +149,8 @@ audio {
 }
 
 .play #controls-container {
-  top: 50%;
-  transform: translate( -50%, calc( 0.5*var(--s) ) );
+  top: calc( 4.5*var(--s) );
+  transform: translate( -50%, 0% );
   scale: 1.2;
 }
 

@@ -14,6 +14,11 @@ export default class OrbitCamera {
   private start = [0, 0];
   private delta = [0, 0];
 
+  private transitionTime = 0;
+  private transitionDuration = 0;
+  private readonly transitionTarget = { start: 0, end: 0 };
+  private readonly transitionPos = { start: 0, end: 0 };
+
   // settings
   private readonly rotationSense;
   private readonly maxPolar;
@@ -86,9 +91,18 @@ export default class OrbitCamera {
   }
 
   update(time: number, audio: AudioData) {
+    const target: [number, number, number] = [...this.target];
+    const up: [number, number, number] = [0, 1, 0];
+    if ( this.updateTransition(time) || this.updatePosition() || this.updateShake(audio, time, target, up) ) {
+      // update viewMatrix
+      lookAt(this.viewMatrix, this.position, target, up);
+    }
+  }
+
+  private updatePosition() {
     if ( Math.abs(this.delta[0]) < 1e-3 && Math.abs(this.delta[1]) < 1e-3 ) {
       this.delta[0] = this.delta[1] = 0;
-      if (audio.shake < 1e-6) return;
+      return false;
     }
 
     const spherical = Spherical.fromVec3(this.position);
@@ -104,16 +118,73 @@ export default class OrbitCamera {
     this.position[1] = pos[1];
     this.position[2] = pos[2];
 
+    return true;
+  }
+
+  private updateShake(audio: AudioData, time: number, target: [number, number, number], up: [number, number, number]) {
+    if (audio.shake < 1e-6) return false;
+
     // changing up vector to simulate camera roll
     const an = audio.shake * 0.05 * Math.cos(23 * time);
-    const up = [Math.sin(an), Math.cos(an), 0];
+    up[0] = Math.sin(an);
+    up[1] = Math.cos(an);
+    up[2] = 0;
     // changing target to simulate camera shake/tilt
-    const target = [
-      this.target[0] + audio.shake * this.maxShake * Math.sin(17 * time),
-      this.target[1] + audio.shake * this.maxShake * Math.sin(31 * time),
-      this.target[2] + audio.shake * this.maxShake * Math.sin(37 * time),
-    ];
-    // update viewMatrix
-    lookAt(this.viewMatrix, this.position, target, up);
+    target[0] = this.target[0] + audio.shake * this.maxShake * Math.sin(17 * time);
+    target[1] = this.target[1] + audio.shake * this.maxShake * Math.sin(31 * time);
+    target[2] = this.target[2] + audio.shake * this.maxShake * Math.sin(37 * time);
+
+    return true;
   }
+
+  private updateTransition(time: number) {
+    const delta = time - this.transitionTime;
+    if (delta > this.transitionDuration) return false;
+
+    // update target y position
+    const targetDelta = this.transitionTarget.end - this.transitionTarget.start;
+    let x = delta / this.transitionDuration;
+    let percent = easeInOutQuad(x);
+    this.target[1] = clamp(
+      this.transitionTarget.start + percent * targetDelta,
+      Math.min( this.transitionTarget.start, this.transitionTarget.end ),
+      Math.max( this.transitionTarget.start, this.transitionTarget.end ),
+    );
+
+    // update position
+    const posDelta = this.transitionPos.end - this.transitionPos.start;
+    x = delta / this.transitionDuration;
+    percent = easeInOutQuad(x);
+
+    const spherical = Spherical.fromVec3(this.position);
+    spherical.radius = clamp(
+      this.transitionPos.start + percent * posDelta,
+      Math.min( this.transitionPos.start, this.transitionPos.end ),
+      Math.max( this.transitionPos.start, this.transitionPos.end ),
+    );
+    const p = spherical.toVec3();
+    this.position[0] = p[0];
+    this.position[1] = p[1];
+    this.position[2] = p[2];
+
+    return true;
+  }
+
+  // time in sec
+  transition(
+    time: number, dur: number,
+    target: typeof this.transitionTarget,
+    pos: typeof this.transitionPos) {
+    this.transitionTime = time;
+    this.transitionDuration = dur;
+    this.transitionTarget.start = target.start;
+    this.transitionTarget.end = target.end;
+    this.transitionPos.start = pos.start;
+    this.transitionPos.end = pos.end;
+  }
+}
+
+// https://easings.net/#easeInOutQuad
+function easeInOutQuad(x: number): number {
+  return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
 }

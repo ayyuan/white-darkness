@@ -10,9 +10,10 @@ import Settings from './Settings';
 
 const camera = new OrbitCamera({
   position: [0.01,0,50],
-  target: [0,0,0],
+  target: [0,5,0],
   maxPolar: 2*Math.PI / 3,
-  minPolar: Math.PI / 3
+  minPolar: Math.PI / 3,
+  dampingFactor: 0.1,
 });
 
 const fbo = createFBO();
@@ -30,7 +31,7 @@ window.addEventListener('resize', () => {
 });
 
 const audioElem = document.querySelector('audio')!;
-const audio = new AudioData(audioElem);
+const audio = new AudioData(audioElem, camera);
 
 export default function render(delta: number) {
   const time = 1e-3 * performance.now();
