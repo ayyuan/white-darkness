@@ -1,7 +1,19 @@
-html, body {
+:root {
   --bg-col: rgb(0, 0, 0);
+  --c-990: hsla(0, 0%, 99%, 1);
+  --c-900: hsla(0, 0%, 90%, 1);
+  --c-800: hsla(0, 0%, 85%, 1);
+  --c-700: hsla(0, 0%, 70%, 1);
+  --c-600: hsla(0, 0%, 65%, 1);
+  --c-500: hsla(0, 0%, 50%, 1);
+  --c-400: hsla(0, 0%, 40%, 1);
+  --c-300: hsla(0, 0%, 30%, 1);
+  --c-100: hsla(0, 0%, 10%, 1);
+  --s: 3.5rem; /* spacing */
+}
 
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+html, body {
+  font-family: text;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -14,6 +26,17 @@ html, body {
   -webkit-text-size-adjust: 100%;
 }
 
+@font-face {
+  font-family: title;
+  src: url("/fonts/title.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: text;
+  src: url("/fonts/text.woff2") format("woff2");
+}
+
+/****** Canvas ******/
 canvas {
   width: 100%;
   height: 100%;
@@ -21,45 +44,49 @@ canvas {
   display: block;
 }
 
+/****** Audio ******/
 audio {
   position: absolute;
 }
 
-#quality-container {
+/****** Song ******/
+#song-container {
   position: absolute;
-  top: 4%;
-  left: 0;
+  bottom: var(--s);
+  left: var(--s);
+  color: var(--c-900);
+  user-select: none;
 }
 
-#quality {
-  /* the only reason we need a parent container is so we can get its width here */
-  --parent-width: 100%;
-  position: relative;
-  left: calc(95vw - var(--parent-width));
+#song-name {
+  font-family: title;
+  font-size: 2rem;
+}
+
+#song-artist {
+  font-size: 1rem;
+}
+
+/****** Quality Settings ******/
+#quality-container {
+  position: absolute;
+  bottom: var(--s);
+  right: var(--s);
   display: flex;
   justify-content: center;
   align-items: center;
   user-select: none;
-  font-weight: 400;
   font-size: 1rem;
-  transition: left 0.5s ease 0s;
-}
-
-@media only screen and (max-width: 700px) {
-  #quality {
-    left: calc(50vw - var(--parent-width)/2);
-  }
 }
 
 .btn {
-  color: #949494;
+  color: var(--c-500);
   padding: 0.5rem;
   transition: color 0.2s linear 0s;
 }
 
 .selected {
-  color: #E4E5E6;
-  font-weight: 600;
+  color: var(--c-900);
 }
 
 .btn::after {
@@ -67,7 +94,7 @@ audio {
   display: block;
   margin-top: 0.1em;
   width: 0%;
-  border-bottom: 1px solid #E4E5E6;
+  border-bottom: 1px solid var(--c-900);
   transition: width 0.2s linear 0s;
 }
 
@@ -77,15 +104,16 @@ audio {
 
 .btn:hover {
   cursor: pointer;
-  color: #F2F2F2;
+  color: var(--c-800);
 }
 
 #quality-label {
-  color: #949494;
+  color: var(--c-600);
   font-weight: 600;
   margin-right: 0.5rem;
 }
 
+/****** Error Labels ******/
 #error {
   position: absolute;
   top: 50%;
@@ -113,6 +141,7 @@ audio {
   font-size: 1.75rem;
 }
 
+/****** Helper Classes ******/
 .hidden {
   display: none;
 }
