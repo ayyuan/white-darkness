@@ -4,11 +4,11 @@
      xmlns="http://www.w3.org/2000/svg">
   <style>
     circle {
-      stroke: #030303;
+      stroke: hsla(0, 0%, 10%, 1);
     }
     @media (prefers-color-scheme: dark) {
       circle {
-        stroke: #FCFCFC;
+        stroke: hsla(0, 0%, 90%, 1);
       }
     }
   </style>
