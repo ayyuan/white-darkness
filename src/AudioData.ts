@@ -1,7 +1,6 @@
 export default class AudioData {
 
   private readonly context: AudioContext;
-  private readonly element: HTMLAudioElement;
   private readonly analyser: AnalyserNode;
   private readonly freqArray: Uint8Array;
   readonly dataArray: Float32Array;
@@ -12,7 +11,6 @@ export default class AudioData {
   private static readonly SIZE = 512;
 
   constructor(audioElem: HTMLAudioElement) {
-    this.element = audioElem;
     this.context = new AudioContext();
     this.analyser = this.context.createAnalyser();
     this.analyser.fftSize = AudioData.SIZE * 2;
@@ -22,17 +20,25 @@ export default class AudioData {
     this.time = 0;
     this.shake = 0;
 
-    const track = this.context.createMediaElementSource(this.element);
+    const track = this.context.createMediaElementSource(audioElem);
     track.connect(this.analyser).connect(this.context.destination);
 
-    this.element.addEventListener('play', () => {
-      if (this.context.state === 'suspended') {
-        this.context.resume();
+    const ui = document.getElementById('ui')!;
+    const controls = document.getElementById('controls')!;
+    controls.addEventListener('click', () => {
+      if (!this.isPlaying) {
+        // play song
+        if (this.context.state === 'suspended') {
+          this.context.resume();
+        }
+        audioElem.play();
+        ui.classList.remove('play');
+      } else {
+        // pause song
+        audioElem.pause();
+        ui.classList.add('play');
       }
-      this.isPlaying = true;
-    });
-    this.element.addEventListener('pause', () => {
-      this.isPlaying = false;
+      this.isPlaying = !this.isPlaying;
     });
   }
 
