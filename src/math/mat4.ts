@@ -21,12 +21,26 @@ export function perspective(m: Float32Array, fovy: number, aspect: number, near:
   return m;
 }
 
-// create view matrix
-// NOTE: make sure eye and at are not the same value
-// NOTE: make sure view direction and up vector are not aligned
-// otherwise cross product will result in 0 due to them being parallel
-// ie eye=[0,5,0] and up: [0,1,0] will not work instead use eye=[0.01,5,0]
-export function lookAt(m: Float32Array, eye: number[], at: number[], up: number[]) {
+/**
+ * create view matrix
+ * 
+ * NOTE: make sure eye and at are not the same value
+ * 
+ * NOTE: make sure view direction and up vector are not aligned
+ * otherwise cross product will result in 0 due to them being parallel
+ * ie eye=[0,5,0] and up: [0,1,0] will not work instead use eye=[0.01,5,0]
+ * 
+ * @param m output will be written here
+ * @param eye camera position
+ * @param at camera target or where the camera should look at
+ * @param up up direction for camera
+ * @returns m
+ */
+export function lookAt(
+  m: Float32Array,
+  eye: [number, number, number],
+  at: [number, number, number],
+  up: [number, number, number]) {
   // z = normalize( eye - at ), camera looking in -z-axis
   let z0 = eye[0] - at[0];
   let z1 = eye[1] - at[1];
@@ -152,7 +166,7 @@ export function scale(m: Float32Array, v: [number, number, number]) {
   return m;
 }
 
-export function translate(m: Float32Array, t: number[]) {
+export function translate(m: Float32Array, t: [number, number, number]) {
   m[12] = m[0]*t[0] + m[4]*t[1] + m[8 ]*t[2] + m[12];
   m[13] = m[1]*t[0] + m[5]*t[1] + m[9 ]*t[2] + m[13];
   m[14] = m[2]*t[0] + m[6]*t[1] + m[10]*t[2] + m[14];
