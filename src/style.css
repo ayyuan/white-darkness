@@ -75,7 +75,16 @@ audio {
   align-items: center;
   user-select: none;
   text-align: center;
-  transition: all var(--t-d) var(--t-fn) 0s;
+  transition: all var(--t-d) var(--t-fn) 0s,
+              opacity 0.2s ease-in 0s;
+  opacity: 1;
+}
+
+@media only screen and (max-width: 767px),
+       only screen and (max-height: 600px) {
+  #title-container {
+    opacity: 0;
+  }
 }
 
 #title {
@@ -154,6 +163,13 @@ audio {
   scale: 1.2;
 }
 
+@media only screen and (max-width: 767px),
+       only screen and (max-height: 600px) {
+  .play #controls-container {
+    top: 20%;
+  }
+}
+
 #play-icon {
   display: none;
 }
@@ -178,6 +194,16 @@ audio {
   color: var(--c-900);
   user-select: none;
   text-align: start;
+  opacity: 1;
+  transition: all 0.2s ease-in 0s;
+}
+
+@media only screen and (max-width: 767px),
+       only screen and (max-height: 600px) {
+  #song-container {
+    opacity: 0;
+    transform: translateX( calc( -150% - var(--s) ) );
+  }
 }
 
 #song-name {
@@ -199,6 +225,15 @@ audio {
   align-items: center;
   user-select: none;
   font-size: 1rem;
+  transition: all 0.2s ease-in-out 0s;
+}
+
+@media only screen and (max-width: 767px),
+       only screen and (max-height: 600px) {
+  #quality-container {
+    right: 50%;
+    transform: translateX(50%);
+  }
 }
 
 .btn {
