@@ -54,7 +54,7 @@ void main() {
 #if !SHOW_FULL_BOUNDING_VOLUME
   if ( map(p) > 0.26 ) {
     // cull/discard voxel if too far from sdf=0 isosurface
-    gl_Position = vec4(0.);
+    gl_Position = vec4( 0./0. );
   } else {
 #endif
     gl_Position = uProjectionMatrix * uViewMatrix * vec4(wp, 1.);
@@ -119,6 +119,8 @@ void main() {
   for (; i<60.; i+=1.) {
     float d = map(vOrigin + rd*t);
 
+    // because the SDF is inexact we need to reduce
+    // the step size to prevent overstepping artifacts
     t += log(0.7*d + 1.);
     g += 0.0001 / (0.0001 + d*d);
 
