@@ -13,6 +13,8 @@ const camera = new OrbitCamera({
   target: [0,5,0],
   maxPolar: 2*Math.PI / 3,
   minPolar: Math.PI / 3,
+  near: 40-23,
+  far: 144,
   dampingFactor: 0.1,
 });
 

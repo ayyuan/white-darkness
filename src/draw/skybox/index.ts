@@ -7,7 +7,7 @@ import createVAO from './createVAO';
 
 const program = createSkyboxProgram();
 const vao = createVAO(program);
-const modelMatrix = scale(createMat4(), [100, 100, 100]);
+const modelMatrix = scale(createMat4(), [51, 51, 51]);
 
 // uniform locations
 const projMatLoc = gl.getUniformLocation(program, 'uProjectionMatrix')!;
