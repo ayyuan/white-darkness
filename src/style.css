@@ -143,18 +143,20 @@ audio {
   transition: all 0.2s linear 0s;
 }
 
-#controls:hover {
-  cursor: pointer;
-  background-color: var(--c-900);
-  padding: 0.3rem 2rem;
-}
+@media (hover: hover) {
+  #controls:hover {
+    cursor: pointer;
+    background-color: var(--c-900);
+    padding: 0.3rem 2rem;
+  }
 
-#controls:hover #controls-label {
-  color: var(--c-100);
-}
+  #controls:hover #controls-label {
+    color: var(--c-100);
+  }
 
-#controls:hover svg {
-  fill: var(--c-400);
+  #controls:hover svg {
+    fill: var(--c-400);
+  }
 }
 
 .play #controls-container {
@@ -259,9 +261,11 @@ audio {
   width: 100%;
 }
 
-.btn:hover {
-  cursor: pointer;
-  color: var(--c-800);
+@media (hover: hover) {
+  .btn:hover {
+    cursor: pointer;
+    color: var(--c-800);
+  }
 }
 
 #quality-label {
